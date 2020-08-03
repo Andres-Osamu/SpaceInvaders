@@ -1,6 +1,7 @@
 import os
 import pygame
-import random
+from colour import Color
+from PIL import ImageColor
 
 def Game_Intro():
 
@@ -21,27 +22,29 @@ def Game_Intro():
     width = 50
     height = 50
     spacing = 25
-    red = 0
-    green = 0
-    blue = 0
-    RGB = (red, green, blue)
     run = True
 
-
+    counter = 0
+    xred = Color("red")
+    colors = list(xred.range_to(Color("blue"), 13))
+    rgb = ImageColor.getcolor(str(colors[0]), "RGB")
 
     while run:
-        pygame.time.delay(5)
+        pygame.time.delay(50)
         for event in pygame.event.get():
-            # print(event)
             if event.type == pygame.QUIT:
                 run = False
             if event.type ==pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     run = False    
             if event.type == displayAliens_event:
+                    RGB = ImageColor.getcolor(str(colors[counter]), "RGB")
                     pygame.draw.rect(window, RGB, (xCord, yCord, width, height))
                     pygame.display.update()
                     xCord += spacing + width
+                    counter +=1
+                    if counter == 13:
+                        counter = 0
                     if xCord + width < displayX:
                         pygame.event.post(pygame.event.Event(displayAliens_event))
                     else :
@@ -49,14 +52,10 @@ def Game_Intro():
                         yCord += spacing + height
                         if yCord+height < displayY:
                             pygame.event.post(pygame.event.Event(displayAliens_event))
-                        else :
-                            xCord = 25
-                            yCord = 25
-                            red = random.randint(0,255)
-                            green = random.randint(0,255)
-                            blue = random.randint(0,255)
-                            RGB = (red, green, blue)
-                            pygame.event.post(pygame.event.Event(displayAliens_event))
+                        # else :
+                        #     xCord = 25
+                        #     yCord = 25
+                        #     # pygame.event.post(pygame.event.Event(displayAliens_event))
                             
 
 def main():
